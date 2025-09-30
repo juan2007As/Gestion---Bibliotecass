@@ -1,0 +1,461 @@
+/* =============================================================
+   SISTEMA DE GESTIÓN DE USUARIOS - ESTILOS MODERNOS Y RESPONSIVE
+   ============================================================= */
+
+/* ---------------------- RESET Y BASE ---------------------- */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #fff;
+    color: #222;
+/* =================================================================
+    MENÚ DE USUARIOS - ESTILOS ESPECÍFICOS
+    Archivo: estilos_menu_usuarios.css
+    ================================================================= */
+
+/*
+    Este archivo contiene los estilos específicos para el menú de usuarios.
+    Los estilos globales y de componentes reutilizables (botones, alertas, tablas, modales)
+    están en estilos_modal_comun.css.
+*/
+}
+
+/* ---------------------- HEADER ---------------------- */
+/*
+    Nota: Los estilos de alertas, botones y tablas están centralizados en estilos_modal_comun.css.
+    Aquí solo se personalizan los del menú de usuarios.
+*/
+.Box {
+    position: relative;
+    background: #fff;
+    width: 100%;
+    height: 100px;
+    margin: 0;
+    z-index: 1;
+    box-shadow: 0 2px 8px #0001;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+.Box__img {
+    height: 50px;
+    margin-left: 18px;
+}
+.Box__Title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: 0.5px;
+}
+
+/* ---------------------- BARRA DE ADMINISTRACIÓN ---------------------- */
+.Box_administracion {
+    background: #444;
+    width: 100%;
+    min-height: 56px;
+    z-index: 1;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 16px 8px 16px;
+    box-sizing: border-box;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 2px 8px #0001;
+}
+.Administracion__title {
+    color: #fff;
+    font-size: 22px;
+    font-weight: 600;
+    margin-right: 18px;
+}
+#input__Busqueda {
+    width: 240px;
+    height: 32px;
+    border: none;
+    border-radius: 6px;
+    box-shadow: 0 0 10px 0 #1112;
+    font-size: 15px;
+    padding: 0 12px;
+    margin-right: 18px;
+    transition: box-shadow 0.2s;
+}
+#input__Busqueda:focus {
+    outline: 2px solid #2228;
+    box-shadow: 0 0 0 2px #2224;
+}
+
+/* ---------------------- BOTONES PRINCIPALES ---------------------- */
+.Box_administracion button,
+.Box_administracion a.btn-menu-principal {
+    background: #f7f7f7;
+    color: #222;
+    border: 1px solid #bbb;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+    box-shadow: 0 2px 8px #0001;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
+    cursor: pointer;
+    outline: none;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    position: relative;
+}
+.Box_administracion button:hover,
+.Box_administracion a.btn-menu-principal:hover {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+    box-shadow: 0 4px 16px #0002;
+    text-decoration: none;
+}
+
+/* ---------------------- TABLA DE USUARIOS ---------------------- */
+.Box__Tabla {
+    position: relative;
+    z-index: 1;
+    margin-top: 24px;
+    top: 0;
+    overflow-x: auto;
+    width: 100%;
+    box-sizing: border-box;
+    background: none;
+    height: 100%;
+}
+.Tabla__Usuarios {
+    width: 100%;
+    min-width: 900px;
+    border-collapse: collapse;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px #0001;
+    margin: 0 auto;
+}
+th, td {
+    padding: 10px 8px;
+    font-size: 15px;
+    color: #222;
+    border: 1.5px solid #e0e0e0;
+    text-align: left;
+}
+th {
+    background: #f2f2f2;
+    font-size: 16px;
+    color: #222;
+    font-weight: 600;
+}
+tr:nth-child(even) {
+    background: #f9f9f9;
+}
+#fila_boton {
+    justify-content: center;
+    width: 200px;
+    padding: 0;
+}
+.btn-actualizar, .btn-eliminar {
+    background: #f7f7f7;
+    display: block;
+    width: 100%;
+    padding: 12px 0;
+    margin: 6px 0;
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+    border: 1px solid #bbb;
+    box-shadow: 0 1px 4px #0001;
+    cursor: pointer;
+    color: #222;
+    transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
+}
+.btn-actualizar:hover, .btn-eliminar:hover {
+    background: #222;
+    color: #fff;
+    border-color: #222;
+    box-shadow: 0 4px 16px #0002;
+}
+
+/* ---------------------- ALERTAS ---------------------- */
+.alerts {
+    max-width: 500px;
+    margin: 20px auto;
+    position: absolute;
+    top: 1px;
+    z-index: 3;
+    left: 600px;
+}
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px #0001;
+}
+.alert-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+.alert-error {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+/* ---------------------- MODALES DASHBOARD USUARIOS (ESTÁNDAR LIBROS) ---------------------- */
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    opacity: 1;
+}
+.modal.active {
+    display: flex !important;
+}
+.modal-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.32);
+    z-index: 1;
+    cursor: pointer;
+}
+.modal-content {
+    position: relative;
+    z-index: 2;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 8px 32px #0003;
+    padding: 32px 32px 24px 32px;
+    min-width: 320px;
+    max-width: 98vw;
+    width: 410px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    animation: modalFadeIn 0.22s cubic-bezier(.4,1.6,.6,1);
+}
+@keyframes modalFadeIn {
+    0% { transform: translateY(-32px) scale(0.98); opacity: 0; }
+    100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+.close {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    background: none;
+    border: none;
+    font-size: 28px;
+    color: #888;
+    cursor: pointer;
+    z-index: 3;
+    transition: color 0.2s;
+    line-height: 1;
+}
+.close:hover {
+    color: #222;
+}
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 18px;
+}
+.modal-form input,
+.modal-form select {
+    padding: 10px 12px;
+    border-radius: 6px;
+    border: 1.5px solid #bbb;
+    font-size: 15px;
+    background: #fafbfc;
+    transition: border 0.2s, box-shadow 0.2s;
+}
+.modal-form input:focus,
+.modal-form select:focus {
+    border: 1.5px solid #222;
+    outline: none;
+    box-shadow: 0 0 0 2px #2222;
+}
+.modal-btn {
+    background: #222;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: 0 2px 8px #0001;
+}
+.modal-btn:hover {
+    background: #444;
+}
+.modal-btn-cancel {
+    background: #f7f7f7;
+    color: #222;
+    border: 1.5px solid #bbb;
+    border-radius: 6px;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 0;
+    margin-bottom: 0;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+    box-shadow: 0 2px 8px #0001;
+}
+.modal-btn-cancel:hover {
+    background: #eee;
+    color: #222;
+    border: 1.5px solid #222;
+}
+.modal-btn-danger {
+    background: #c0392b;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 0;
+    font-size: 16px;
+    font-weight: 600;
+    margin-top: 8px;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    box-shadow: 0 2px 8px #0001;
+}
+.modal-btn-danger:hover {
+    background: #a93226;
+}
+@media (max-width: 600px) {
+    .modal-content {
+        min-width: 0;
+        width: 98vw;
+        padding: 18px 6vw 18px 6vw;
+    }
+}
+
+/* =============================================================
+   RESPONSIVE DESIGN
+   ============================================================= */
+@media (max-width: 900px) {
+    .Tabla__Usuarios {
+        min-width: 600px;
+    }
+}
+@media (max-width: 600px) {
+    html, body {
+        background: #333 !important;
+        width: 100vw !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+        margin: 0;
+        padding: 0;
+    }
+    .Box, .Box_administracion, .Box__Tabla {
+        margin-left: auto;
+        margin-right: auto;
+        max-width: 96vw;
+        width: 96vw !important;
+        border-radius: 8px;
+        box-sizing: border-box;
+        overflow-x: hidden;
+    }
+    .Box {
+        margin-top: 18px;
+    }
+    /* --- TABLA RESPONSIVE TIPO CARD --- */
+    .Tabla__Usuarios, .Tabla__Usuarios thead, .Tabla__Usuarios tbody, .Tabla__Usuarios tr, .Tabla__Usuarios th, .Tabla__Usuarios td {
+        display: block !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        box-sizing: border-box !important;
+        overflow-x: hidden !important;
+        border-radius: 0 !important;
+    }
+    .Tabla__Usuarios {
+        min-width: 0 !important;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px #0001;
+        background: #fff;
+        padding: 0;
+    }
+    .Tabla__Usuarios thead {
+        display: none !important;
+    }
+    .Tabla__Usuarios tr {
+        margin-bottom: 18px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        background: #fff;
+        box-shadow: 0 2px 8px #0001;
+        padding: 8px 0 8px 0;
+    }
+    .Tabla__Usuarios td {
+        padding: 8px 12px;
+        border: none;
+        position: relative;
+        font-size: 15px;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+    .Tabla__Usuarios td:last-child {
+        border-bottom: none;
+    }
+    .Tabla__Usuarios td:before {
+        content: attr(data-label);
+        font-weight: bold;
+        display: block;
+        margin-bottom: 2px;
+        color: #222;
+        font-size: 13px;
+    }
+    /* Ocultar columnas menos relevantes en móvil (ajusta según tus necesidades) */
+    .Tabla__Usuarios td:nth-child(4), /* Teléfono */
+    .Tabla__Usuarios td:nth-child(5), /* Email */
+    .Tabla__Usuarios td:nth-child(6)  /* Rol */
+    {
+        display: none !important;
+    }
+    .btn-actualizar, .btn-eliminar {
+        width: 100%;
+        margin: 6px 0;
+        font-size: 16px;
+        padding: 10px 0;
+    }
+    #fila_boton {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        padding: 0;
+    }
+    .Box__Tabla {
+        top: 0;
+        padding: 0;
+    }
+    .Box {
+        flex-direction: column;
+        height: auto;
+        padding: 10px 0;
+    }
+    .Box__img {
+        top: 0;
+        left: 0;
+        height: 40px;
+    }
+    .Box__Title {
+        left: 0;
+        bottom: 0;
+        font-size: 15px;
+        margin-top: 5px;
+        text-align: center;
+    }
+}

@@ -1,0 +1,131 @@
+/* =================================================================
+   PÁGINA DE LOGIN - BIBLIOTECA  
+   Archivo: estilos_login.css
+   Estética: Grises, negros y blancos - Consistente con el sistema
+   ================================================================= */
+
+/* =================================================================
+   PÁGINA DE LOGIN - BIBLIOTECA
+   Archivo: estilos_login.css
+   Estética: Grises, negros y blancos - Consistente con el sistema
+   ================================================================= */
+
+/*
+   Este archivo contiene los estilos específicos para la página de login.
+   Los estilos globales y de componentes reutilizables (botones, alertas, modales)
+   están en estilos_modal_comun.css.
+*/
+
+body {
+    font-family: sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.login-container {
+    background: white;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+
+.logo {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.logo img {
+    height: 60px;
+    width: auto;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+input[type="email"], input[type="password"] {
+    width: 100%;
+    height: 35px;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    box-shadow: 0 0 10px 0 #1112;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+input[type="email"]:focus, input[type="password"]:focus {
+    outline: 2px solid #fff8;
+    box-shadow: 0 0 15px 0 #1116;
+}
+
+.btn-login {
+    background-color: gray;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-login:hover {
+    background-color: black;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Alertas - mismo estilo que el sistema */
+.alert {
+    padding: 10px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.alert-error {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+.alert-warning {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+}
+
+/*
+   Nota: Los estilos de alertas y botones están centralizados en estilos_modal_comun.css.
+   Aquí solo se personalizan los del login.
+*/

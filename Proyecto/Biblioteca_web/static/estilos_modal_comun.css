@@ -1,0 +1,160 @@
+/* === MODAL MODERNO UNIFICADO === */
+.modal {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+/* =================================================================
+    ESTILOS COMUNES Y MODALES UNIFICADOS
+    Archivo: estilos_modal_comun.css
+    ================================================================= */
+
+/*
+    Este archivo contiene los estilos globales y componentes reutilizables:
+    - Botones principales
+    - Modales
+    - Alertas
+    - Tablas
+    - Utilidades responsive
+    Los archivos específicos solo deben contener personalizaciones propias.
+*/
+}
+.modal[style*="display: block"], .modal[style*="display: flex"], .modal.active {
+    pointer-events: auto;
+/*
+    Nota: Mantener este archivo como fuente única de estilos globales y componentes reutilizables.
+    Si se requiere un nuevo componente común, agregarlo aquí y documentarlo.
+*/
+}
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(20, 20, 20, 0.72);
+    backdrop-filter: blur(4px);
+    z-index: 1999;
+    animation: overlayFadeIn 0.3s;
+}
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+.modal-content {
+    position: relative;
+    z-index: 2001;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+    background: #fff;
+    color: #181818;
+    border-radius: 12px;
+    box-shadow: 0 12px 48px 0 rgba(0,0,0,0.38), 0 2px 12px 0 rgba(0,0,0,0.13);
+    padding: 28px 20px 24px 20px;
+    max-width: 340px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalPopIn 0.38s cubic-bezier(.23,1.02,.47,1.13);
+    border: none;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow-x: hidden;
+    box-sizing: border-box;
+}
+@keyframes modalPopIn {
+    0% { transform: scale(0.90); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+}
+.modal-content .close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #b0b0b0;
+    cursor: pointer;
+    transition: color 0.18s, background 0.18s;
+    z-index: 3;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content .close:hover, .modal-content .close:focus {
+    color: #fff;
+    background: #222;
+    outline: none;
+}
+.modal-content label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #222;
+    letter-spacing: 0.01em;
+    font-size: 1rem;
+    display: block;
+}
+.modal-content input[type="text"],
+.modal-content input[type="number"],
+.modal-content input[type="file"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    background: #f7f7f7;
+    color: #181818;
+    transition: border 0.18s, box-shadow 0.18s;
+    font-family: inherit;
+    box-sizing: border-box;
+}
+.modal-content input[type="text"]:focus,
+.modal-content input[type="number"]:focus {
+    border: 2px solid #222;
+    outline: none;
+    box-shadow: 0 0 0 2px #e0e0e0;
+}
+.modal-content button, .modal-content input[type="submit"] {
+    background: linear-gradient(90deg, #222 60%, #444 100%);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 9px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+    margin-top: 8px;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);
+    letter-spacing: 0.01em;
+    width: 100%;
+    display: block;
+}
+.modal-content button:hover, .modal-content button:focus, .modal-content input[type="submit"]:hover, .modal-content input[type="submit"]:focus {
+    background: #111;
+    outline: none;
+    transform: translateY(-2px) scale(1.03);
+}
+.modal-content h2, .modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    font-weight: 700;
+    color: #181818;
+    font-size: 1.13rem;
+    letter-spacing: 0.01em;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    text-align: center;
+}

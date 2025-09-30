@@ -1,0 +1,227 @@
+<!-- ========================================= -->
+<!--  LIBROS.HTML - Gestión de Libros (CRUD)  -->
+<!--  Incluye modales para agregar, eliminar  -->
+<!--  y actualizar libros.                    -->
+<!-- ========================================= -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Estilos principales y de modales para libros -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos_menu_libros.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos_modal_comun.css') }}">
+    <title>Biblioteca</title>
+</head>
+<body>
+    <!-- ========== MENSAJES FLASH ========== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alerts">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- ========== ENCABEZADO Y ACCIONES ========== -->
+    <div class="Box">
+        <img src="{{ url_for('static', filename='imagenes/LogoInicial.jpg') }}" alt="Logo" class="Box__img">
+        <h1 class="Box__Title">Administración de Biblioteca</h1>
+        <div class="Box_administracion">
+            <h2 class="Administracion__title">Gestión de libros:</h2>
+            <input type="text" id="input__Busqueda" placeholder="Buscar por título, autor o ID...">
+            <button id="Boton_Agregar">Agregar Libro</button>
+            <button id="Boton_Eliminar">Eliminar Libro</button>
+            <a href="{{ url_for('index') }}" class="btn-menu-principal">Menú Principal</a>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: AGREGAR LIBRO ========== -->
+    <div id="modalAgregarLibro" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
+            <button type="button" class="close" aria-label="Cerrar" onclick="cerrarModalAgregarLibro()">&times;</button>
+            <h2>Agregar Libro</h2>
+            <form action="{{ url_for('agregar_libro_web') }}" method="post" enctype="multipart/form-data" style="width:100%;display:flex;flex-direction:column;gap:10px;">
+                <input type="file" name="imagen" id="imagen" accept="image/*" class="form-control" style="margin-bottom:10px;">
+                <input type="text" name="titulo" id="titulo" placeholder="Título..." required>
+                <input type="text" name="autor" id="autor" placeholder="Autor..." required>
+                <input type="text" name="editorial" id="editorial" placeholder="Editorial..." required>
+                <input type="number" name="año" id="año" placeholder="Año..." required>
+                <input type="text" name="genero" id="genero" placeholder="Género..." required>
+                <button type="submit">Agregar Libro</button>
+                <button type="button" onclick="cerrarModalAgregarLibro()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: ELIMINAR LIBRO ========== -->
+    <div id="modalEliminarLibro" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
+            <button type="button" class="close" aria-label="Cerrar" onclick="cerrarModalEliminarLibro()">&times;</button>
+            <h2>Eliminar Libro</h2>
+            <form action="{{ url_for('eliminar_libros_web') }}" method="post" style="width:100%;display:flex;flex-direction:column;gap:10px;" class="form-eliminar-libro">
+                <input type="number" name="id_libro" placeholder="ID del libro" required>
+                <button type="submit" style="background:linear-gradient(90deg,#b71c1c 60%,#e53935 100%);">Eliminar</button>
+                <button type="button" onclick="cerrarModalEliminarLibro()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: ACTUALIZAR LIBRO ========== -->
+    <div id="modalActualizarLibro" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
+            <button type="button" class="close" aria-label="Cerrar" onclick="cerrarModalActualizarLibro()">&times;</button>
+            <h2>Actualizar Libro</h2>
+            <form action="{{ url_for('actualizar_libros_web') }}" method="post" style="width:100%;display:flex;flex-direction:column;gap:10px;">
+                <input type="hidden" id="id_libro_actualizar" name="id_libro" value="">
+                <input type="text" name="titulo" placeholder="Título..." id="titulo_actualizar">
+                <input type="text" name="autor" placeholder="Autor..." id="autor_actualizar">
+                <input type="text" name="editorial" placeholder="Editorial..." id="editorial_actualizar">
+                <input type="number" name="año" placeholder="Año..." id="año_actualizar">
+                <input type="text" name="genero" placeholder="Género..." id="genero_actualizar">
+                <select name="disponible" id="disponible_actualizar" style="margin-bottom:10px;">
+                    <option value="">Mantener disponibilidad actual</option>
+                    <option value="si">Disponible</option>
+                    <option value="no">No disponible</option>
+                </select>
+                <button type="submit">Actualizar</button>
+                <button type="button" onclick="cerrarModalActualizarLibro()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== TABLA DE LIBROS ========== -->
+    <div class="Box Box__Tabla">
+        <table class="Tabla__Libros" border="1">
+            <thead>
+                <tr>
+                    <th></th><th>ID</th><th>Título</th><th>Autor</th><th>Editorial</th><th>Año</th><th>Género</th><th>Disponible</th><th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for libro in libros %}
+                <tr>
+                    <td class="imagen-celda" data-label="Imagen">
+                        {% if libro.imagen %}
+                        <img src="{{url_for('obtener_imagen_libro', id_libro=libro.id_libro) }}"
+                            alt="Portada de {{ libro.titulo }}"
+                            class="libro-imagen"
+                            onerror="this.onerror=null;this.src='{{ url_for('static', filename='imagenes/ImagenLibro.png') }}';">
+                        <div class="sin-imagen" style="display: none;">No Image</div>
+                        {% else %}
+                        <img src="{{ url_for('static', filename='imagenes/ImagenLibro.png') }}" alt="Imagen por defecto" class="libro-imagen">
+                        {% endif %}
+                    </td>
+                    <td data-label="ID">{{ libro.id_libro }}</td>
+                    <td data-label="Título">{{ libro.titulo }}</td>
+                    <td data-label="Autor">{{ libro.autor }}</td>
+                    <td data-label="Editorial">{{ libro.editorial }}</td>
+                    <td data-label="Año">{{ libro.año }}</td>
+                    <td data-label="Género">{{ libro.genero }}</td>
+                    <td data-label="Disponible">{{ "Sí" if libro.disponible else "No" }}</td>
+                    <td id="fila_boton" data-label="Acciones">
+                        <button class="btn-actualizar" data-libro-id="{{ libro.id_libro }}">Actualizar</button>
+                        <a href="{{ url_for('eliminar_libro_web', id_libro=libro.id_libro) }}" class="btn-eliminar">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="{{ url_for('static', filename='script_libros.js') }}"></script>
+    <style>
+    /* Mejoras visuales para cards en móvil */
+    @media (max-width: 600px) {
+        .Tabla__Libros tr {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px #0002;
+            margin-bottom: 18px;
+            padding: 10px 8px;
+            width: 100%;
+        }
+        .Tabla__Libros td {
+            border-bottom: 1px solid #eee;
+        }
+        .Tabla__Libros td:last-child {
+            border-bottom: none;
+        }
+        .btn-actualizar, .btn-eliminar {
+            border-radius: 6px;
+            box-shadow: 0 1px 4px #0001;
+            margin-bottom: 6px;
+            background: #f8f8f8;
+        }
+        .btn-actualizar:hover, .btn-eliminar:hover {
+            background: #222;
+            color: #fff;
+        }
+    }
+    </style>
+    <!-- MODAL DE CONFIRMACIÓN DE ELIMINACIÓN -->
+<div id="modalConfirmarEliminar" class="modal" style="display:none;">
+    <div class="modal-overlay"></div>
+    <div class="modal-content" tabindex="-1" role="dialog" aria-modal="true" style="max-width:350px;">
+        <h2>¿Eliminar libro?</h2>
+        <p>¿Estás seguro de que deseas eliminar este libro? Esta acción no se puede deshacer.</p>
+        <div style="display:flex;gap:12px;justify-content:flex-end;">
+            <button id="btnCancelarEliminar" type="button">Cancelar</button>
+            <button id="btnConfirmarEliminar" type="button" style="background:#b71c1c;color:#fff;">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+let eliminarAction = null; // Puede ser un form o un link
+
+// Mostrar el modal y guardar la acción pendiente
+function mostrarModalEliminar(action) {
+    eliminarAction = action;
+    document.getElementById('modalConfirmarEliminar').style.display = 'block';
+}
+
+// Ocultar el modal
+function cerrarModalEliminar() {
+    document.getElementById('modalConfirmarEliminar').style.display = 'none';
+    eliminarAction = null;
+}
+
+// Confirmar eliminación
+document.getElementById('btnConfirmarEliminar').onclick = function() {
+    if (eliminarAction) {
+        if (eliminarAction.tagName === 'FORM') {
+            eliminarAction.submit();
+        } else if (eliminarAction.tagName === 'A') {
+            window.location.href = eliminarAction.href;
+        }
+    }
+    cerrarModalEliminar();
+};
+
+// Cancelar
+document.getElementById('btnCancelarEliminar').onclick = cerrarModalEliminar;
+
+// Interceptar formularios de eliminación
+document.querySelectorAll('.form-eliminar-libro').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        mostrarModalEliminar(form);
+    });
+});
+
+// Interceptar enlaces de eliminación en la tabla
+document.querySelectorAll('.btn-eliminar').forEach(link => {
+    link.addEventListener('click', function(e) {
+        e.preventDefault();
+        mostrarModalEliminar(link);
+    });
+});
+</script>
+</body>
+</html>

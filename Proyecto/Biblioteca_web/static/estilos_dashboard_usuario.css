@@ -1,0 +1,738 @@
+/* ==== PAGINACIÓN DEL CATÁLOGO ==== */
+#paginacionLibros {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin: 18px 0 0 0;
+    flex-wrap: wrap;
+}
+/* Botones de paginación: negro, gris y blanco */
+.paginacion-btn {
+    background-color: #222; /* negro suave */
+    color: #fff;
+    border: 1px solid #888; /* gris medio */
+    border-radius: 4px;
+    margin: 0 2px;
+    padding: 6px 14px;
+    cursor: pointer;
+    font-size: 1rem;
+    font-weight: 600;
+    transition: background 0.2s, color 0.2s, border 0.2s, transform 0.1s;
+}
+.paginacion-btn:hover:not(:disabled) {
+    background-color: #444;
+    color: #fff;
+    border: 1px solid #fff;
+    transform: translateY(-2px) scale(1.04);
+}
+.pagina-activa {
+    background-color: #fff !important;
+    color: #222 !important;
+    border: 2px solid #222 !important;
+    font-weight: bold;
+}
+
+/* Botón Buscar: negro, gris y blanco */
+.btn-buscar, .buscar-btn, input[type="submit"], button[type="submit"] {
+    background-color: #222 !important;
+    color: #fff !important;
+    border: 1px solid #888 !important;
+    border-radius: 4px !important;
+    padding: 8px 18px !important;
+    font-size: 1rem !important;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s, border 0.2s;
+}
+.btn-buscar:hover, .buscar-btn:hover, input[type="submit"]:hover, button[type="submit"]:hover {
+    background-color: #444 !important;
+    color: #fff !important;
+    border: 1px solid #fff !important;
+}
+.multas-panel ul {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 16px 0;
+}
+.multas-panel li {
+    display: flex;
+    align-items: center;
+    background: #f7f7fa;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    padding: 10px 14px;
+    font-size: 1.05em;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+    transition: background 0.2s;
+}
+.multas-panel li:hover {
+    background: #e6f7ff;
+}
+.multas-panel input[type="checkbox"] {
+    margin-right: 12px;
+    accent-color: #007bff;
+    transform: scale(1.2);
+}
+.btn-pagar-multas, .multas-panel button[type="button"] {
+    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 1.08em;
+    font-weight: 600;
+    margin-right: 10px;
+    margin-top: 6px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0,123,255,0.08);
+    transition: background 0.2s, transform 0.1s;
+}
+.btn-pagar-multas:hover, .multas-panel button[type="button"]:hover {
+    background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+    transform: translateY(-2px) scale(1.04);
+}
+.btn-pagar-multas:active, .multas-panel button[type="button"]:active {
+    transform: scale(0.98);
+}
+
+/* ==== CATÁLOGO DE LIBROS ==== */
+.books-panel {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 24px 20px 18px 20px;
+    margin-top: 32px;
+    margin-bottom: 32px;
+    transition: box-shadow 0.3s;
+}
+.search-books {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+#searchBooks {
+    flex: 1;
+    padding: 10px 14px;
+    border-radius: 6px;
+    border: 1px solid #d0d7de;
+    font-size: 1.05em;
+    transition: border 0.2s;
+}
+#searchBooks:focus {
+    border: 1.5px solid #007bff;
+    outline: none;
+}
+.btn-search {
+    background: linear-gradient(90deg, #28a745 60%, #218838 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-size: 1.08em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(40,167,69,0.08);
+    transition: background 0.2s, transform 0.1s;
+}
+.btn-search:hover {
+    background: linear-gradient(90deg, #218838 60%, #28a745 100%);
+    transform: translateY(-2px) scale(1.04);
+}
+.btn-search:active {
+    transform: scale(0.98);
+}
+/* Catálogo de libros en filas tipo grid */
+.books-results {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 18px;
+    justify-items: start;
+    min-height: 60px;
+    animation: fadeIn 0.7s;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.book-card {
+    background: #f7f7fa;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    width: 220px;
+    padding: 16px 14px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    cursor: pointer;
+    min-height: 320px;
+}
+.book-card:hover {
+    box-shadow: 0 6px 24px rgba(0,123,255,0.13);
+    transform: translateY(-4px) scale(1.03);
+    background: #e6f7ff;
+}
+.book-card img {
+    width: 120px;
+    height: 160px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 8px rgba(0,0,0,0.13);
+    background: #f4f4f4;
+    border: 1.5px solid #bbb;
+    display: block;
+}
+.book-card h3 {
+    font-size: 1.13em;
+    margin: 0 0 6px 0;
+    color: #007bff;
+    text-align: center;
+}
+.book-card p {
+    font-size: 0.98em;
+    color: #333;
+    margin: 2px 0 0 0;
+    text-align: center;
+}
+.book-card .btn-prestar {
+    margin-top: auto;
+    background: linear-gradient(90deg, #ffc107 60%, #ff9800 100%);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 18px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(255,193,7,0.08);
+    transition: background 0.2s, transform 0.1s;
+}
+.book-card .btn-prestar:hover {
+    background: linear-gradient(90deg, #ff9800 60%, #ffc107 100%);
+    transform: translateY(-2px) scale(1.04);
+}
+.book-card .btn-prestar:active {
+    transform: scale(0.98);
+}
+
+/* Animación para mostrar tarjetas de libros */
+.book-card {
+    animation: fadeInBook 0.5s;
+}
+@keyframes fadeInBook {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Mejoras generales para responsividad */
+@media (max-width: 900px) {
+    .books-results {
+        justify-content: center;
+    }
+    .book-card {
+        width: 90vw;
+        max-width: 340px;
+    }
+}
+/* =================================================================
+   DASHBOARD DE USUARIO - BIBLIOTECA
+   Archivo: estilos_dashboard_usuario.css
+   Estética: Grises, negros y blancos - Consistente con el sistema
+   ================================================================= */
+
+body {
+    font-family: sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f5f5f5;
+}
+
+/* Header similar al Box del sistema */
+.header {
+    background-color: white;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 20px;
+    box-sizing: border-box;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.logo-img {
+    height: 50px;
+    width: auto;
+}
+
+.logo h1 {
+    font-size: 18px;
+    color: #333;
+    margin: 0;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    color: #333;
+    font-size: 14px;
+}
+
+.btn-logout {
+    background-color: #fffc;
+    color: black;
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-size: 13px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-logout:hover {
+    background-color: black;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+/* Paneles - mismo estilo que stat-box */
+.user-panel, .loans-panel, .books-panel {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.books-panel {
+    grid-column: 1 / -1;
+
+    /* Catálogo de libros en filas tipo grid (única regla válida) */
+    .books-results {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 18px;
+        justify-items: start;
+        min-height: 60px;
+        animation: fadeIn 0.7s;
+    }
+}
+/* Información del perfil */
+.profile-info {
+    margin-bottom: 20px;
+}
+
+.info-item {
+    display: flex;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.info-item label {
+    font-weight: bold;
+    min-width: 100px;
+    color: #333;
+}
+
+.info-item span {
+    color: #555;
+}
+
+/* Botones - mismo estilo del sistema */
+.btn-edit-profile, .btn-search, .btn-return, .btn-borrow {
+    background-color: gray;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-weight: bold;
+    font-size: 13px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.btn-edit-profile:hover, .btn-search:hover, .btn-return:hover, .btn-borrow:hover {
+    background-color: black;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+/* Lista de préstamos */
+.loans-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.loan-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fafafa;
+}
+
+.book-info h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.book-info p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.loan-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.multa {
+    color: #a94442;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.no-loans {
+    text-align: center;
+    color: #555;
+    font-style: italic;
+    padding: 20px;
+    font-size: 14px;
+}
+
+/* Búsqueda de libros */
+.search-books {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-books input {
+    flex: 1;
+    height: 35px;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    box-shadow: 0 0 10px 0 #1112;
+    font-size: 14px;
+}
+
+.search-books input:focus {
+    outline: 2px solid #fff8;
+}
+
+
+
+.book-item {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 15px;
+    background-color: #fafafa;
+}
+
+.book-item h4 {
+    margin: 0 0 10px 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.book-item p {
+    margin: 5px 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.btn-borrow {
+    width: 100%;
+    margin-top: 10px;
+}
+
+/* Alertas - mismo estilo del sistema */
+.alerts {
+    position: fixed;
+    top: 120px;
+    right: 20px;
+    z-index: 1000;
+    max-width: 300px;
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.alert-error {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+.alert-warning {
+    background-color: #fcf8e3;
+    color: #8a6d3b;
+}
+
+/* ==== MODAL MEJORADO ==== */
+/* Modal visualmente atractivo */
+/* Modal: centrado absoluto y sin márgenes */
+/* Modal centrado con flexbox */
+/* Modal centrado con flexbox y stacking correcto */
+.modal {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    pointer-events: none;
+    margin: 0;
+    padding: 0;
+}
+.modal[style*="display: block"], .modal.active {
+    pointer-events: auto;
+}
+/* Overlay con desenfoque y opacidad elegante */
+/* Overlay modal: cubre toda la pantalla y queda debajo del modal-content */
+/* Overlay modal: debajo del modal */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(20, 20, 20, 0.72); /* Más oscuro */
+    backdrop-filter: blur(4px);
+    z-index: 1999;
+    animation: overlayFadeIn 0.3s;
+}
+@keyframes overlayFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+/* Modal visualmente atractivo y animado */
+/* Modal-content: centrado, compacto y sin margen accidental */
+.modal-content {
+    position: relative;
+    z-index: 2001;
+    margin: 0 auto !important;
+    box-sizing: border-box;
+    background: #fff;
+    color: #181818;
+    border-radius: 12px;
+    box-shadow: 0 12px 48px 0 rgba(0,0,0,0.38), 0 2px 12px 0 rgba(0,0,0,0.13);
+    padding: 28px 20px 20px 20px;
+    max-width: 340px;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalPopIn 0.38s cubic-bezier(.23,1.02,.47,1.13);
+    border: none;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    overflow-x: hidden;
+}
+.modal-content form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5em;
+}
+.modal-content input[type="number"] {
+    width: 80%;
+    min-width: 80px;
+    max-width: 180px;
+    margin: 0 auto 12px auto;
+    display: block;
+}
+.modal-content button, .modal-content input[type="submit"] {
+    width: 90%;
+    margin: 0 auto 8px auto;
+}
+@keyframes modalPopIn {
+    0% {
+        transform: scale(0.90);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+/* Botón de cerrar (X) más elegante */
+.modal-content .close {
+    position: absolute;
+    top: 16px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #b0b0b0;
+    cursor: pointer;
+    transition: color 0.18s, background 0.18s;
+    z-index: 3;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.modal-content .close:hover, .modal-content .close:focus {
+    color: #fff;
+    background: #222;
+    outline: none;
+}
+/* Etiquetas y campos del modal mejorados */
+.modal-content label {
+    font-weight: 500;
+    margin-bottom: 5px;
+    color: #222;
+    letter-spacing: 0.01em;
+    font-size: 1rem;
+    display: block;
+}
+.modal-content input[type="text"],
+.modal-content input[type="number"] {
+    width: 100%;
+    padding: 8px 10px;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 5px;
+    margin-bottom: 12px;
+    font-size: 1rem;
+    background: #f7f7f7;
+    color: #181818;
+    transition: border 0.18s, box-shadow 0.18s;
+    font-family: inherit;
+}
+.modal-content input[type="text"]:focus,
+.modal-content input[type="number"]:focus {
+    border: 2px solid #222;
+    outline: none;
+    box-shadow: 0 0 0 2px #e0e0e0;
+}
+.modal-content button, .modal-content input[type="submit"] {
+    background: linear-gradient(90deg, #222 60%, #444 100%);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 9px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+    margin-top: 8px;
+    box-shadow: 0 2px 10px 0 rgba(0,0,0,0.10);
+    letter-spacing: 0.01em;
+    width: 100%;
+    display: block;
+}
+.modal-content button:hover, .modal-content button:focus, .modal-content input[type="submit"]:hover, .modal-content input[type="submit"]:focus {
+    background: #111;
+    outline: none;
+    transform: translateY(-2px) scale(1.03);
+}
+.modal-content h2, .modal-content h3 {
+    margin-top: 0;
+    margin-bottom: 14px;
+    font-weight: 700;
+    color: #181818;
+    font-size: 1.13rem;
+    letter-spacing: 0.01em;
+    font-family: 'Segoe UI', 'Arial', sans-serif;
+    text-align: center;
+}
+
+/* Imagen del libro en el modal */
+.modal-book-img {
+    display: block;
+    margin: 0 auto 14px auto;
+    max-width: 120px;
+    max-height: 160px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.15);
+}
+
+/* --- BOTONES DE MODAL AGREGAR LIBRO --- */
+#modalAgregarLibro .modal-content button,
+#modalAgregarLibro .modal-content input[type="submit"] {
+    background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 9px 0;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+    margin-top: 8px;
+    box-shadow: 0 2px 10px 0 rgba(0,123,255,0.10);
+    letter-spacing: 0.01em;
+    width: 100%;
+    display: block;
+}
+#modalAgregarLibro .modal-content button:hover, #modalAgregarLibro .modal-content button:focus,
+#modalAgregarLibro .modal-content input[type="submit"]:hover, #modalAgregarLibro .modal-content input[type="submit"]:focus {
+    background: linear-gradient(90deg, #0056b3 60%, #007bff 100%);
+    outline: none;
+    transform: translateY(-2px) scale(1.03);
+}
+
+/* Centrado vertical y horizontal absoluto del modal */
+.modal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    min-width: 100vw;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 2000;
+    pointer-events: none;
+}
+.modal[style*="display: block"], .modal.active {
+    pointer-events: auto;
+}
+.modal-content {
+    margin: 0;
+    /* El resto de estilos ya aplicados */
+}

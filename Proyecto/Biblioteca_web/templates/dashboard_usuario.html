@@ -1,0 +1,141 @@
+<!-- ========================================= -->
+<!--  DASHBOARD_USUARIO.HTML - Panel Usuario  -->
+<!--  Muestra perfil, multas y préstamos      -->
+<!--  activos del usuario final.             -->
+<!-- ========================================= -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Estilos específicos para el dashboard de usuario -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos_dashboard_usuario.css') }}">
+    <title>Mi Biblioteca - Panel de Usuario</title>
+</head>
+<body>
+    <!-- ========== MENSAJES FLASH ========== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alerts">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- ========== ENCABEZADO Y USUARIO ========== -->
+    <div class="header">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='imagenes/LogoInicial.jpg') }}" alt="Logo" class="logo-img">
+            <h1>Mi Biblioteca</h1>
+        </div>
+        <div class="user-info">
+            <span>Bienvenido, {{ usuario.nombre }} {{ usuario.apellido }}</span>
+            <a href="{{ url_for('logout') }}" class="btn-logout">Cerrar Sesión</a>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- ========== PANEL DE PERFIL ========== -->
+        <div class="user-panel">
+            <h2>Mi Perfil</h2>
+            <div class="profile-info">
+                <div class="info-item">
+                    <label>Nombre:</label>
+                    <span>{{ usuario.nombre }} {{ usuario.apellido }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Documento:</label>
+                    <span>{{ usuario.documento }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Email:</label>
+                    <span>{{ usuario.email }}</span>
+                </div>
+                <div class="info-item">
+                    <label>Teléfono:</label>
+                    <span>{{ usuario.telefono }}</span>
+                </div>
+            </div>
+            <button class="btn-edit-profile" onclick="toggleEditProfile()">Editar Perfil</button>
+        </div>
+
+        <!-- ========== PANEL DE MULTAS ========== -->
+        <div class="multas-panel">
+            <h2>Mis Multas</h2>
+            {% if total_multas %}
+                <form action="{{ url_for('pagar_multas') }}" method="POST">
+                    <ul>
+                        {% for prestamo in multas %}
+                            <li>
+                                <input type="checkbox" name="ids_prestamos" value="{{ prestamo.id }}">
+                                Libro: {{ prestamo.titulo_libro }} - Multa: ${{ "%.2f"|format(prestamo.multa) }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <button type="submit" class="btn-pagar-multas">Pagar Multas</button>
+                    <button type="button" onclick="seleccionarTodos()">Seleccionar Todos</button>
+                </form>
+            {% else %}
+                <p>No tienes multas pendientes.</p>
+            {% endif %}
+        </div>
+        <script>
+        function seleccionarTodos() {
+            document.querySelectorAll('input[name="ids_prestamos"]').forEach(cb => cb.checked = true);
+        }
+        </script>
+
+        <!-- ========== PANEL DE PRÉSTAMOS ACTIVOS ========== -->
+        <div class="loans-panel">
+            <h2>Mis Préstamos Activos</h2>
+            {% if prestamos %}
+                <div class="loans-list">
+                    {% for prestamo in prestamos %}
+                        {% if not prestamo.fecha_devolucion_real %}
+                        <div class="loan-item">
+                            <div class="book-info">
+                                <h3>{{ prestamo.titulo_libro }}</h3>
+                                <p>Autor: {{ prestamo.autor_libro }}</p>
+                                <p>Fecha de préstamo: {{ prestamo.fecha_prestamo }}</p>
+                                <p>Fecha de devolución: {{ prestamo.fecha_devolucion_esperada }}</p>
+                            </div>
+                            <div class="loan-actions">
+                                {% if prestamo.multa > 0 %}
+                                    <span class="multa">Multa: ${{ "%.2f"|format(prestamo.multa) }}</span>
+                                {% endif %}
+                                <button class="btn-return" onclick="devolverLibro('{{ prestamo.id }}')">Devolver</button>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="no-loans">No tienes préstamos activos</p>
+            {% endif %}
+        </div>
+        <!-- Modal de libro: overlay y contenido como hermanos -->
+        <div id="modalLibro" class="modal" style="display:none;">
+            <div class="modal-overlay"></div>
+            <div class="modal-content" id="modalLibroContent" tabindex="-1" role="dialog" aria-modal="true">
+                <!-- Aquí se cargará la info del libro y el formulario de préstamo/devolución -->
+            </div>
+        </div>
+        <!-- Panel de libros disponibles -->
+        <div class="books-panel">
+            <h2>Libros Disponibles</h2>
+            <div class="search-books">
+                <input type="text" id="searchBooks" placeholder="Buscar libros por título, autor o género...">
+                <button class="btn-buscar" onclick="buscarLibros()">Buscar</button>
+            </div>
+            <div id="booksResults" class="books-results">
+                <!-- Aquí se cargarán los libros via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='script_dashboard_usuarios.js') }}"></script>
+</body>
+</html>

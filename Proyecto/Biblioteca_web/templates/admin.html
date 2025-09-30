@@ -1,0 +1,37 @@
+
+<!-- ========================================= -->
+<!--  ADMIN.HTML - Panel de Administración     -->
+<!--  Acceso central a gestión de usuarios,    -->
+<!--  libros y préstamos.                      -->
+<!-- ========================================= -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Estilos principales para panel de administración -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos_menu_usuarios.css') }}">
+    <title>Biblioteca - Administración</title>
+</head>
+<body>
+    <!-- Logo y título principal -->
+    <div class="Box">
+        <img src="{{ url_for('static', filename='imagenes/LogoInicial.jpg') }}" alt="Logo" class="Box__img">
+        <h1 class="Box__Title">Panel de Administración</h1>
+        <!-- Menú de navegación principal -->
+        <div class="Box_administracion">
+            <h2 class="Administracion__title">Gestión general:</h2>
+            <a href="{{ url_for('usuarios') }}" class="btn-menu-principal">Usuarios</a>
+            <a href="{{ url_for('libros') }}" class="btn-menu-principal">Libros</a>
+            <a href="{{ url_for('prestamos') }}" class="btn-menu-principal">Préstamos</a>
+            <a href="{{ url_for('index') }}" class="btn-menu-principal">Menú Principal</a>
+        </div>
+    </div>
+    <!-- Mensaje de bienvenida y descripción -->
+    <div class="Box Box__Tabla">
+        <h2 style="text-align:center; margin-top:40px;">Bienvenido al panel de administración de la biblioteca</h2>
+        <p style="text-align:center; color:#555;">Desde aquí puedes gestionar usuarios, libros y préstamos de forma centralizada y moderna.</p>
+    </div>
+</body>
+</html>

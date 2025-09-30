@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Estilos principales para menú principal -->
+    <link rel="stylesheet" href="../static/estilos_menu_principal.css">
+    <title>Biblioteca</title>
+</head>
+<body>
+    <!-- Barra superior con logo y título -->
+    <div class="topbar">
+        <img src="{{ url_for('static', filename='imagenes/LogoInicial.jpg') }}" alt="Logo" class="logo-superior">
+        <span class="titulo-superior"><b>Bienvenido a la Biblioteca.</b></span>
+    </div>
+    <!-- Barra gris de sección -->
+    <div class="barra-seccion">Opciones de administración</div>
+    <!-- Panel flotante de opciones -->
+    <div class="panel-admin-menu">
+        <a class="admin-btn" href="{{ url_for('listar_libros') }}">Gestión de Libros</a>
+        <a class="admin-btn" href="{{ url_for('listar_usuarios') }}">Gestión de Usuarios</a>
+        <a class="admin-btn" href="{{ url_for('menu_prestamos') }}">Gestión de Préstamos</a>
+        <a class="admin-btn logout" href="{{ url_for('logout') }}">Cerrar sesión</a>
+    </div>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,203 @@
+<!-- ========================================= -->
+<!--  PRESTAMOS_LISTA.HTML - Lista de Préstamos -->
+<!--  Estadísticas, desglose y tabla de datos   -->
+<!-- ========================================= -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Estilos principales para préstamos -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos_menu_prestamos.css') }}">
+    <title>Gestión de Préstamos | Biblioteca</title>
+</head>
+<body>
+    <!-- ========== MENSAJES FLASH ========== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alerts">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+    <!-- ========== ENCABEZADO Y ACCIONES ========== -->
+    <div class="Box">
+        <img src="{{ url_for('static', filename='imagenes/LogoInicial.jpg') }}" alt="Logo" class="Box__img">
+        <h1 class="Box__Title">Administración de Biblioteca</h1>
+        <div class="Box_administracion">
+            <h2 class="Administracion__title">Gestión de préstamos</h2>
+            <a href="{{ url_for('index') }}" class="btn-menu-principal">Menú Principal</a>
+        </div>
+        <!-- Menú de acciones rápidas -->
+        <nav class="Menu menu-dashboard">
+            <ul class="menu-list">
+                <li><button id="Boton_Prestamo" class="btn-dashboard" type="button" onclick="mostrarMenuPrestar()">Prestar Libro</button></li>
+                <li><button id="Boton_Devolver" class="btn-dashboard" type="button" onclick="mostrarMenuDevolver()">Devolver Libro</button></li>
+            </ul>
+        </nav>
+        <div class="busqueda-dashboard">
+            <input type="text" id="input__Busqueda" class="input-dashboard" placeholder="Buscar por usuario, libro o ID...">
+        </div>
+    </div>
+    <main class="Box__Tabla">
+        <!-- ========== ESTADÍSTICAS ========== -->
+        <section class="estadisticas" style="margin-bottom: 32px;">
+            <div class="stat-box">
+                <h3>Total de Préstamos</h3>
+                <span class="stat-numero">{{ prestamos|length }}</span>
+            </div>
+            <div class="stat-box">
+                <h3>Préstamos Activos</h3>
+                <span class="stat-numero">{{ prestamos|selectattr('fecha_devolucion_real', 'none')|list|length }}</span>
+            </div>
+            <div class="stat-box">
+                <h3>Préstamos Devueltos</h3>
+                <span class="stat-numero">{{ prestamos|rejectattr('fecha_devolucion_real', 'none')|list|length }}</span>
+            </div>
+            <div class="stat-box" onclick="toggleDesgloseGeneros()" style="cursor: pointer;">
+                <h3>Estadística de géneros</h3>
+                <span class="stat-numero">{{ total_generos }} géneros</span>
+            </div>
+        </section>
+        <!-- ========== DESGLOSE DE GÉNEROS ========== -->
+        <section id="desglose-generos" style="display: none; margin-bottom: 24px;">
+            <div class="desglose-container">
+                {% for genero, cantidad in generos.items() %}
+                <div class="genero-item">
+                    <span class="genero-nombre">{{ genero }}</span>
+                    <span class="genero-cantidad">{{ cantidad }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        <script>
+        function toggleDesgloseGeneros() {
+            const desglose = document.getElementById('desglose-generos');
+            desglose.style.display = desglose.style.display === 'none' ? 'block' : 'none';
+        }
+        </script>
+        <!-- ========== TABLA DE PRÉSTAMOS ========== -->
+        <div class="tabla-responsive" style="margin-top: 12px;">
+            <table class="Tabla__Prestamos" border="0">
+                <thead>
+                    <tr>
+                        <th>ID Préstamo</th>
+                        <th>ID Libro</th>
+                        <th>Género</th>
+                        <th>Usuario</th>
+                        <th>Fecha Préstamo</th>
+                        <th>Fecha Devolución Esperada</th>
+                        <th>Fecha Real</th>
+                        <th>Estado</th>
+                        <th>Multa</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    {% for prestamo in prestamos %}
+                    <tr class="{% if not prestamo.fecha_devolucion_real %}prestamo-activo{% else %}prestamo-devuelto{% endif %}">
+                        <td>{{ prestamo.id }}</td>
+                        <td>{{ prestamo.id_libro }}</td>
+                        <td>
+                            {% if prestamo.genero_libro %}
+                                {{ prestamo.genero_libro }}
+                            {% else %}
+                                {% set libro = libros|selectattr("id_libro", "equalto", prestamo.id_libro)|first %}
+                                {{ libro.genero if libro else "Desconocido" }}
+                            {% endif %}
+                        </td>
+                        <td class="usuario-info">
+                            {% for usuario in usuarios %}
+                                {% if usuario.documento == prestamo.documento_usuario %}
+                                    <span class="nombre-usuario">{{ usuario.nombre }} {{ usuario.apellido }}</span>
+                                    <br>
+                                    <small class="id-usuario">Doc: {{ usuario.documento }}</small>
+                                {% endif %}
+                            {% endfor %}
+                        </td>
+                        <td>{{ prestamo.fecha_prestamo }}</td>
+                        <td>{{ prestamo.fecha_devolucion_esperada }}</td>
+                        <td>
+                            {% if prestamo.fecha_devolucion_real %}
+                                {{ prestamo.fecha_devolucion_real }}
+                            {% else %}
+                                <span class="pendiente">Pendiente</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if prestamo.fecha_devolucion_real %}
+                                <span class="estado-devuelto">Devuelto</span>
+                            {% else %}
+                                <span class="estado-activo">Activo</span>
+                            {% endif %}
+                        </td>
+                        <td class="multa">
+                            {% if prestamo.multa > 0 %}
+                                ${{ "%.2f"|format(prestamo.multa) }}
+                            {% else %}
+                                $0.00
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="9" class="no-prestamos">No hay préstamos registrados</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <!-- MODALES -->
+    <div id="modalPrestarLibro" class="modal" tabindex="-1" aria-modal="true" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button type="button" class="close" aria-label="Cerrar" onclick="ocultarMenuPrestar()">&times;</button>
+            <h2>Préstamo de Libro</h2>
+            <form action="{{ url_for('prestar_libro_web') }}" method="post" class="modal-form">
+                <div class="campo-busqueda">
+                    <input type="text" id="busqueda_usuario" name="busqueda_usuario" placeholder="Buscar usuario por documento o nombre..." required autocomplete="off">
+                    <input type="hidden" id="documento_usuario" name="documento_usuario">
+                    <div id="resultados_usuario" class="resultados-busqueda"></div>
+                </div>
+                <div class="campo-busqueda">
+                    <input type="text" id="busqueda_libro" name="busqueda_libro" placeholder="Buscar libro por ID, título o género..." required autocomplete="off">
+                    <input type="hidden" id="id_libro" name="id_libro">
+                    <div id="resultados_libro" class="resultados-busqueda"></div>
+                </div>
+                <input type="number" name="dias" placeholder="Días de préstamo..." min="1" required>
+                <div class="modal-actions">
+                    <button class="modal-btn" type="submit">Prestar</button>
+                    <button type="button" class="modal-btn-cancel" onclick="ocultarMenuPrestar()">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="modalDevolverLibro" class="modal" tabindex="-1" aria-modal="true" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button type="button" class="close" aria-label="Cerrar" onclick="ocultarMenuDevolver()">&times;</button>
+            <h2>Devolver Libro</h2>
+            <div class="modal-form">
+                <div class="campo-busqueda">
+                    <input type="text" id="busqueda_usuario_devolver" placeholder="Buscar usuario por documento o nombre..." autocomplete="off">
+                    <div id="resultados_usuario_devolver" class="resultados-busqueda"></div>
+                </div>
+                <div id="paso_seleccionar_libro" class="paso-devolucion" style="display: none;"></div>
+                <div id="libros_prestados" class="libros-prestados"></div>
+                <form id="form_devolver_multiple" action="{{ url_for('devolver_libros_multiples') }}" method="post" style="display: none;">
+                    <input type="hidden" id="ids_prestamos_devolver" name="ids_prestamos">
+                    <div id="resumen_devolucion_multiple" class="resumen-devolucion"></div>
+                    <div class="modal-actions">
+                        <button id="btn_confirmar_devolucion_multiple" class="modal-btn" type="submit" style="display: none;">Confirmar Devoluciones</button>
+                        <button id="btn_cancelar_devolucion" type="button" class="modal-btn-cancel" onclick="reiniciarDevolucion()" style="display: none;">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='script_prestamos.js') }}"></script>
+</body>
+</html>

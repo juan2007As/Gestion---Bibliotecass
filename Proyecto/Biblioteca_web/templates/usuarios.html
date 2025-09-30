@@ -1,0 +1,169 @@
+<!-- ========================================= -->
+<!--  USUARIOS.HTML - Gestión de Usuarios     -->
+<!--  Incluye modales para agregar, eliminar -->
+<!--  y actualizar usuarios.                  -->
+<!-- ========================================= -->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Estilos principales para usuarios -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='estilos_menu_usuarios.css') }}">
+    <title>Biblioteca - Usuarios</title>
+</head>
+<body>
+    <!-- ========== MENSAJES FLASH ========== -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="alerts">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <!-- ========== ENCABEZADO Y ACCIONES ========== -->
+    <div class="Box">
+        <img src="{{ url_for('static', filename='imagenes/LogoInicial.jpg') }}" alt="Logo" class="Box__img">
+        <h1 class="Box__Title">Administración de Biblioteca</h1>
+        <div class="Box_administracion">
+            <h2 class="Administracion__title">Gestión de usuarios:</h2>
+            <input type="text" id="input__Busqueda" placeholder="Buscar por nombre, apellido o email...">
+            <button id="Boton_Agregar">Agregar Usuario</button>
+            <button id="Boton_Eliminar">Eliminar Usuario</button>
+            <a href="{{ url_for('index') }}" class="btn-menu-principal"> Menú Principal</a>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: AGREGAR USUARIO ========== -->
+    <div id="modalAgregarUsuario" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
+            <button type="button" class="close" aria-label="Cerrar" onclick="ocultarMenuAgregar()">&times;</button>
+            <h2>Agregar Usuario</h2>
+            <form action="{{ url_for('agregar_usuario_web') }}" method="post" class="modal-form">
+                <input type="text" name="documento" placeholder="Documento (ej: 1234567890)" required>
+                <input type="text" name="nombre" placeholder="Nombre" required>
+                <input type="text" name="apellido" placeholder="Apellido" required>
+                <input type="text" name="telefono" placeholder="Teléfono" required>
+                <input type="email" name="email" placeholder="Email" required>
+                <input type="password" name="password" placeholder="Contraseña" required minlength="6">
+                <select name="rol" required>
+                    <option value="">Seleccionar rol...</option>
+                    <option value="usuario">Usuario</option>
+                    <option value="bibliotecario">Bibliotecario</option>
+                    <option value="admin">Administrador</option>
+                </select>
+                <button type="submit" class="modal-btn">Agregar Usuario</button>
+                <button type="button" class="modal-btn-cancel" onclick="ocultarMenuAgregar()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: CONFIRMAR ELIMINACIÓN USUARIO (VISUAL) ========== -->
+    <div id="modalConfirmarEliminarUsuario" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
+            <button type="button" class="close" aria-label="Cerrar" onclick="ocultarModalConfirmarEliminarUsuario()">&times;</button>
+            <h2>Confirmar eliminación</h2>
+            <p id="textoConfirmacionUsuario">¿Estás seguro de que deseas eliminar este usuario?</p>
+            <form id="formConfirmarEliminarUsuario" action="{{ url_for('eliminar_usuarios_web') }}" method="post" class="modal-form">
+                <input type="hidden" name="documento" id="documentoEliminarUsuario" value="">
+                <button type="submit" class="modal-btn modal-btn-danger">Sí, eliminar</button>
+                <button type="button" class="modal-btn-cancel" onclick="ocultarModalConfirmarEliminarUsuario()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== MODAL: ACTUALIZAR USUARIO ========== -->
+    <div id="modalActualizarUsuario" class="modal" style="display: none;">
+        <div class="modal-overlay"></div>
+        <div class="modal-content" tabindex="-1" role="dialog" aria-modal="true">
+            <button type="button" class="close" aria-label="Cerrar" onclick="ocultarMenuActualizar()">&times;</button>
+            <h2>Actualizar Usuario</h2>
+            <form action="{{ url_for('actualizar_usuarios_web') }}" method="post" class="modal-form">
+                <input type="hidden" id="documento_usuario_actualizar" name="documento" value="">
+                <input type="text" name="nombre" placeholder="Nombre" id="nombre_actualizar">
+                <input type="text" name="apellido" placeholder="Apellido" id="apellido_actualizar">
+                <input type="text" name="telefono" placeholder="Teléfono" id="telefono_actualizar">
+                <input type="email" name="email" placeholder="Email" id="email_actualizar">
+                <select name="rol" id="rol_actualizar" required>
+                    <option value="usuario">Usuario</option>
+                    <option value="bibliotecario">Bibliotecario</option>
+                    <option value="admin">Administrador</option>
+                </select>
+                <button type="submit" class="modal-btn">Actualizar</button>
+                <button type="button" class="modal-btn-cancel" onclick="ocultarMenuActualizar()">Cancelar</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ========== TABLA DE USUARIOS ========== -->
+    <div class="Box Box__Tabla">
+        <table class="Tabla__Usuarios" border="1">
+            <thead>
+                <tr>
+                    <th>Documento</th><th>Nombre</th><th>Apellido</th><th>Teléfono</th><th>Email</th><th>Rol</th><th></th>
+                </tr>
+            </thead>
+            <tbody id="tableBody">
+                {% for usuario in usuarios %}
+                <tr>
+                    <td>{{ usuario.documento }}</td>
+                    <td>{{ usuario.nombre }}</td>
+                    <td>{{ usuario.apellido }}</td>
+                    <td>{{ usuario.telefono }}</td>
+                    <td>{{ usuario.email }}</td>
+                    <td>{{ usuario.rol }}</td>
+                    <td id="fila_boton">
+                        <button class="btn-actualizar" data-usuario-documento="{{ usuario.documento }}">Actualizar</button>
+                        <a href="#" class="btn-eliminar">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="{{ url_for('static', filename='script_usuarios.js') }}"></script>
+    <script>
+    // --- Confirmación visual de eliminación de usuario ---
+    document.addEventListener('DOMContentLoaded', function() {
+        const tableBody = document.getElementById('tableBody');
+        if (tableBody) {
+            tableBody.addEventListener('click', function(e) {
+                if (e.target.classList.contains('btn-eliminar')) {
+                    e.preventDefault();
+                    const fila = e.target.closest('tr');
+                    if (fila) {
+                        const doc = fila.cells[0].textContent;
+                        document.getElementById('documentoEliminarUsuario').value = doc;
+                        document.getElementById('textoConfirmacionUsuario').textContent = `¿Estás seguro de que deseas eliminar el usuario con documento ${doc}?`;
+                        abrirModalConfirmarEliminarUsuario();
+                    }
+                }
+            });
+        }
+        // Funciones para abrir/cerrar el modal visual
+        window.abrirModalConfirmarEliminarUsuario = function() {
+            const modal = document.getElementById('modalConfirmarEliminarUsuario');
+            if (modal) {
+                modal.style.display = 'flex';
+                setTimeout(() => modal.classList.add('active'), 10);
+            }
+        };
+        window.ocultarModalConfirmarEliminarUsuario = function() {
+            const modal = document.getElementById('modalConfirmarEliminarUsuario');
+            if (modal) {
+                modal.classList.remove('active');
+                setTimeout(() => { modal.style.display = 'none'; }, 200);
+            }
+            // Limpiar campo oculto
+            document.getElementById('documentoEliminarUsuario').value = '';
+        };
+    });
+    </script>
+</body>
+</html>
