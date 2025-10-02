@@ -1,0 +1,282 @@
+/* Estilos generales del cuerpo y tipografía */
+body {
+    font-family: sans-serif;
+    padding: 0;
+    margin: 0;
+}
+
+/* Estilos para mensajes flash */
+.alerts {
+    max-width: 500px;
+    margin: 20px auto;
+    position: absolute;
+    top: 1px;
+    z-index: 3;
+    left: 600px;
+}
+
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+    color: #3c763d;
+}
+
+.alert-error {
+    background-color: #f2dede;
+    color: #a94442;
+}
+
+/* Estilos del contenedor principal (Box) */
+.Box {
+    position: relative;
+    background-color: white;
+    padding: 0;
+    width: 100%;
+    height: 100px;
+    margin: 0;
+    z-index: 1;
+}
+
+/* Estilos de la imagen dentro del contenedor */
+.Box__img {
+    position: relative;
+    height: 50px;
+    top: 25px;
+    left: 10px;
+}
+
+/* Estilos del título principal */
+.Box__Title {
+    font-size: 18px;
+    position: relative;
+    left: 100px;
+    bottom: 26px;
+}
+
+/* Estilos del contenedor de administración */
+.Box_administracion {
+    background-color: gray;
+    width: 100%;
+    height: 50px;
+    z-index: 1;
+}
+
+/* Estilos del título de administración */
+.Administracion__title {
+    position: relative;
+    top: 10px;
+    left: 10px;
+    color: white;
+}
+
+/* Estilos del campo de búsqueda */
+#input__Busqueda {
+    position: relative;
+    left: 220px;
+    top: -37px;
+    width: 200px;
+    height: 25px;
+    border: none;
+    border-radius: 4px;
+    box-shadow: 0 0 10px 0 #1112;
+}
+
+#input__Busqueda:focus {
+    outline: 2px solid #fff8;
+}
+
+#Boton_Agregar, #Boton_Eliminar {
+    position: relative;
+    top: -37px;
+    left: 1000px;
+    z-index: 2;
+    border: #f2f2f2;
+    box-shadow: 0 0 20px 0 #1117;
+    border-radius: 3px;
+    transition: background-color, color 0.2s 0s;
+}
+
+#Boton_Agregar:hover, #Boton_Eliminar:hover {
+    background-color: #111;
+    color: white;
+    outline: 1px solid #fff;
+}
+
+#Boton_Eliminar {
+    left: 1020px;
+}
+
+#Box__contenedor_menu, #Box__contenedor_Delete {
+    background-color: rgba(17, 17, 17, 0.7);
+    position: absolute;
+    top: 0;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+}
+
+.Box__menu_agregar, .Box__menu_Eliminar {
+    background-color: white;
+    padding: 20px;
+    border: 6px solid rgba(17, 17, 17, 0.4);
+    border-radius: 5px;
+    margin: 20px auto;
+    width: 300px;
+    position: absolute;
+    top: 220px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    box-shadow: 0 0 10px black;
+    height: 340px;
+}
+
+#Agregar_libro_menu input, #Eliminar_libro_menu input {
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    padding: 5px;
+    border-radius: 4px;
+    margin: 5px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.Box__menu_agregar button, .Box__menu_Eliminar button {
+    position: absolute;
+    top: 300px;
+    left: 190px;
+    color: black;
+    border: 1px solid black;
+    border-radius: 4px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
+
+.Box__menu_agregar button:hover, .Box__menu_Eliminar button:hover {
+    background-color: black;
+    color: white;
+
+}
+
+#Box__contenedor_menu a, #Box__contenedor_Delete a {
+    font-size: 13px;
+    display: block;
+    color: #333;
+    text-decoration: none;
+    position: absolute;
+    top: 301px;
+    left: 70px;
+    border: 1px solid #111;
+    border-radius: 2px;
+    padding: 8px 16px;
+    background-color: rgba(17, 17, 17, 0.1);
+}
+
+#Box__contenedor_menu a{
+    top: 301px;
+    left: 50px;
+}
+
+#Box__contenedor_menu a:hover, #Box__contenedor_Delete a:hover {
+    text-decoration: none;
+    background-color: black;
+    color: white;
+}
+
+/* Estilos de la tabla y su contenedor */
+.Box__Tabla {
+    position: relative;
+    z-index: 1;
+    top: 75px;
+}
+
+.Tabla__Libros {
+    padding: 10px 5px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+tbody {
+    padding: 10px 5px;
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th {
+    border: 2px solid black;
+    padding: 8px;
+    background-color: #f2f2f2;
+}
+
+td {
+    padding: 8px;
+}
+
+#fila_boton {
+    justify-content: center;
+    width: 200px;
+    padding:0;
+}
+
+/* Estilos para los botones de acción en tabla */
+.btn-actualizar, .btn-eliminar {
+    background-color: #fff2;
+    display: inline-block;
+    padding: 5px 10px;
+    margin: 0px 5px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: background-color, color 0.2s ease;
+    border: 1px solid black;
+    border-radius: 4px;
+    position: relative;
+    margin: 0px 10px;
+    box-shadow: 0 0 10px 0 #1113;
+    cursor: pointer;
+}
+
+.btn-actualizar {
+    color: black;
+}
+
+.btn-actualizar:hover {
+    background-color: #111;
+    color: white;
+    outline: 1px solid #fff;
+}
+
+.btn-eliminar {
+    color: black;
+}
+
+.btn-eliminar:hover {
+    background-color: #111;
+    color: white;
+    outline: 1px solid #fff;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Estilos para select en formularios */
+.form__prin select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: white;
+    box-sizing: border-box;
+}
