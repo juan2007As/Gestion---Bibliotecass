@@ -1,0 +1,28 @@
+Que busca
+
+Cadena de prestamos paga diarios
+Ser mas eficiente
+Promedio de clientes: 200 o mas
+Cada fecha necesarias que genere MENSAJE
+
+formulaciones: 
+
+nombre, capital y abonos maximo 6 quincenas 
+
+cada que la persona pague se automatize la reduccion de pago
+
+por lo pronto solo enviar mensajes por cliente 
+
+flujo desarrollo:
+
+el sube el excel que tiene nombre, monto y abonos a maximo 6 quincenas / 3 meses
+
+Se personaliza el mensaje por cliente y se determina segun la situacion
+
+el cliente responde (aun tocar mirar como va a responder)
+
+el sistema registra el pago y reduce el monto a pagar abonando la quincena
+
+y calcula el nuevo monto a pagar y envia el nuevo mensaje
+
+y se actualiza el excel con los calculos para descargar
